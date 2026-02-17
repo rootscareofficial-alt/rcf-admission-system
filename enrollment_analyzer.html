@@ -3,1033 +3,586 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Enrollment Growth Strategy System</title>
+    <title>RCF Admission Diagnostics & Strategy System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .step-container { display: none; }
         .step-container.active { display: block; }
-        .loader { border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        .loader { border: 3px solid #f3f4f6; border-top: 3px solid #1d4ed8; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .section-tab { cursor: pointer; transition: all 0.2s; }
+        .section-tab.active { background: #1d4ed8; color: white; }
+        .section-tab:not(.active) { background: #e5e7eb; color: #4b5563; }
+        .section-tab:not(.active):hover { background: #d1d5db; }
+        .field-section { display: none; }
+        .field-section.active { display: block; }
+        input, select, textarea { transition: border-color 0.2s; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #1d4ed8; box-shadow: 0 0 0 3px rgba(29,78,216,0.1); }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8 max-w-5xl">
-        <div class="bg-white rounded-lg shadow-lg p-8">
-            <h1 class="text-3xl font-bold text-blue-900 mb-2">School Enrollment Growth Strategy System</h1>
-            <p class="text-gray-600 mb-8">Automated analysis and strategic planning for admission & enrollment growth</p>
-            
-            <!-- Progress Bar -->
-            <div class="mb-8">
-                <div class="flex justify-between mb-2">
-                    <span id="step1-indicator" class="text-sm font-semibold text-blue-600">1. Data Input</span>
-                    <span id="step2-indicator" class="text-sm text-gray-400">2. Goals</span>
-                    <span id="step3-indicator" class="text-sm text-gray-400">3. Analysis</span>
-                    <span id="step4-indicator" class="text-sm text-gray-400">4. Strategy</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2">
-                    <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 25%"></div>
-                </div>
-            </div>
+<body class="bg-slate-100 min-h-screen font-sans">
 
-            <!-- Step 1: Data Input -->
-            <div id="step1" class="step-container active">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Step 1: School Data Input</h2>
-                <p class="text-gray-600 mb-6">Enter your school's current enrollment and admission data for analysis</p>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">School Name</label>
-                        <input type="text" id="schoolName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter school name">
-                    </div>
+<div class="max-w-4xl mx-auto px-4 py-8">
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Academic Year</label>
-                            <input type="text" id="academicYear" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 2024-25">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">School Type</label>
-                            <select id="schoolType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option value="">Select type</option>
-                                <option value="elementary">Elementary</option>
-                                <option value="middle">Middle School</option>
-                                <option value="high">High School</option>
-                                <option value="k12">K-12</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="bg-blue-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-gray-800 mb-3">Current Enrollment Data</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Total Current Enrollment</label>
-                                <input type="number" id="currentEnrollment" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Enrollment Last Year</label>
-                                <input type="number" id="lastYearEnrollment" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 480">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">New Admissions This Year</label>
-                                <input type="number" id="newAdmissions" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 120">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Student Attrition Rate (%)</label>
-                                <input type="number" id="attritionRate" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 8.5">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-green-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-gray-800 mb-3">Admission Funnel Data</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Total Inquiries</label>
-                                <input type="number" id="inquiries" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 450">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Campus Visits/Tours</label>
-                                <input type="number" id="visits" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 280">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Applications Received</label>
-                                <input type="number" id="applications" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 200">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Offers Made</label>
-                                <input type="number" id="offers" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 150">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-purple-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-gray-800 mb-3">Marketing & Outreach</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Marketing Budget (₹)</label>
-                                <input type="number" id="marketingBudget" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 500000">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Primary Lead Source</label>
-                                <select id="leadSource" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    <option value="referrals">Word of Mouth/Referrals</option>
-                                    <option value="digital">Digital Marketing</option>
-                                    <option value="events">Community Events</option>
-                                    <option value="walkins">Walk-ins</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex gap-4 mt-6">
-                    <button onclick="window.location.reload()" class="flex-1 bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg hover:bg-gray-300 transition duration-300">
-                        ↻ Reset Form
-                    </button>
-                    <button onclick="goToStep2()" class="flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300">
-                        Continue to Goals →
-                    </button>
-                </div>
-            </div>
-
-            <!-- Step 2: Goals -->
-            <div id="step2" class="step-container">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Step 2: Enrollment Goals</h2>
-                <p class="text-gray-600 mb-6">Define your enrollment targets for the upcoming academic year</p>
-                
-                <div class="space-y-4">
-                    <div class="bg-yellow-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-gray-800 mb-3">Target Enrollment</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Target Total Enrollment</label>
-                                <input type="number" id="targetEnrollment" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 600">
-                                <p class="text-xs text-gray-500 mt-1">Total students you want enrolled</p>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Target New Admissions</label>
-                                <input type="number" id="targetAdmissions" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 180">
-                                <p class="text-xs text-gray-500 mt-1">New students to admit</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-indigo-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-gray-800 mb-3">Timeline & Priorities</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Target Achievement Timeline</label>
-                                <select id="timeline" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    <option value="4months" selected>4 months (Intensive - Recommended)</option>
-                                    <option value="6months">6 months</option>
-                                    <option value="1year">1 year</option>
-                                </select>
-                                <p class="text-xs text-gray-500 mt-1">4-month timeline is optimized for rapid admission growth</p>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Primary Focus Area</label>
-                                <select id="focusArea" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    <option value="newadmissions">Increase New Admissions</option>
-                                    <option value="retention">Improve Student Retention</option>
-                                    <option value="both">Both Equally</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Plan Detail Level</label>
-                                <select id="planDetail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    <option value="standard">Standard Plan (Monthly milestones)</option>
-                                    <option value="detailed">Detailed Plan (Week-by-week actionables)</option>
-                                </select>
-                                <p class="text-xs text-gray-500 mt-1">Detailed plan provides week-by-week tasks and specific action items</p>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Available Budget Increase (%)</label>
-                                <input type="number" id="budgetIncrease" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 20" value="0">
-                                <p class="text-xs text-gray-500 mt-1">Additional % budget for marketing/outreach</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-teal-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-gray-800 mb-3">Additional Context (Optional)</h3>
-                        <textarea id="additionalContext" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Any specific challenges, competitive factors, or additional information..."></textarea>
-                    </div>
-                </div>
-
-                <div class="flex gap-4 mt-6">
-                    <button onclick="goToStep1()" class="flex-1 bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg hover:bg-gray-300 transition duration-300">
-                        ← Back
-                    </button>
-                    <button onclick="generateStrategy()" class="flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300">
-                        Generate Strategy →
-                    </button>
-                </div>
-            </div>
-
-            <!-- Step 3: Analysis (Loading) -->
-            <div id="step3" class="step-container">
-                <div class="text-center py-12">
-                    <div class="loader mx-auto mb-4"></div>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Analyzing Your Data...</h2>
-                    <p class="text-gray-600">AI is processing your school data and generating strategic recommendations</p>
-                    <div id="analysisProgress" class="mt-6 text-sm text-gray-500"></div>
-                    <button onclick="goToStep2()" class="mt-8 bg-gray-200 text-gray-700 font-semibold py-2 px-6 rounded-lg hover:bg-gray-300 transition duration-300">
-                        ← Back to Goals
-                    </button>
-                </div>
-            </div>
-
-            <!-- Step 4: Strategy Output -->
-            <div id="step4" class="step-container">
-                <div class="mb-6 flex justify-between items-center">
-                    <h2 class="text-2xl font-bold text-gray-800">Your Customized Growth Strategy</h2>
-                    <button onclick="downloadStrategy()" class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 text-sm">
-                        Download Report
-                    </button>
-                </div>
-                <div id="strategyOutput" class="space-y-6"></div>
-                <div class="flex gap-4 mt-8">
-                    <button onclick="goToStep2()" class="flex-1 bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-600 transition duration-300">
-                        ← Edit Goals
-                    </button>
-                    <button onclick="goToStep1()" class="flex-1 bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-600 transition duration-300">
-                        ← Edit Data
-                    </button>
-                    <button onclick="resetSystem()" class="flex-1 bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-700 transition duration-300">
-                        🔄 Start New Analysis
-                    </button>
-                </div>
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <div class="inline-flex items-center gap-3 mb-3">
+            <span class="text-4xl">🎓</span>
+            <div class="text-left">
+                <h1 class="text-2xl font-bold text-blue-900 leading-tight">RCF Admission Diagnostics &</h1>
+                <h1 class="text-2xl font-bold text-blue-900 leading-tight">Strategy System</h1>
             </div>
         </div>
+        <p class="text-gray-500 text-sm">Rootscare Foundation · Powered by AI · School Enrollment Growth</p>
     </div>
 
-    <script>
-        let schoolData = {};
-        let goalsData = {};
+    <!-- Main Card -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
 
-        function updateProgress(step) {
-            const indicators = ['step1-indicator', 'step2-indicator', 'step3-indicator', 'step4-indicator'];
-            const progressBar = document.getElementById('progress-bar');
-            
-            indicators.forEach((id, index) => {
-                const element = document.getElementById(id);
-                if (index < step) {
-                    element.classList.remove('text-gray-400');
-                    element.classList.add('text-blue-600');
-                } else {
-                    element.classList.remove('text-blue-600');
-                    element.classList.add('text-gray-400');
-                }
-            });
-            
-            progressBar.style.width = (step * 25) + '%';
+        <!-- Top Progress Bar -->
+        <div class="bg-blue-900 px-6 py-4">
+            <div class="flex justify-between items-center text-xs text-blue-200 mb-2">
+                <span id="prog-data" class="font-semibold text-white">📋 Data Input</span>
+                <span id="prog-analysis">⚙️ Analysis</span>
+                <span id="prog-strategy">📊 Strategy</span>
+            </div>
+            <div class="w-full bg-blue-800 rounded-full h-1.5">
+                <div id="progress-bar" class="bg-yellow-400 h-1.5 rounded-full transition-all duration-500" style="width:10%"></div>
+            </div>
+        </div>
+
+        <div class="p-6">
+
+            <!-- STEP 1: DATA INPUT (10 sections) -->
+            <div id="step1" class="step-container active">
+
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">School Diagnostic Data</h2>
+                        <p class="text-sm text-gray-500 mt-0.5">Complete all 10 sections for the most accurate strategy</p>
+                    </div>
+                    <span id="section-counter" class="text-sm font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-full">Section 1 of 10</span>
+                </div>
+
+                <!-- Section Tabs Row 1 -->
+                <div class="grid grid-cols-5 gap-1 mb-1 text-xs font-medium">
+                    <button onclick="goToSection(1)" id="tab1" class="section-tab active rounded-lg py-2 px-1 text-center">1. Profile</button>
+                    <button onclick="goToSection(2)" id="tab2" class="section-tab rounded-lg py-2 px-1 text-center">2. Enrollment</button>
+                    <button onclick="goToSection(3)" id="tab3" class="section-tab rounded-lg py-2 px-1 text-center">3. Funnel</button>
+                    <button onclick="goToSection(4)" id="tab4" class="section-tab rounded-lg py-2 px-1 text-center">4. Parents</button>
+                    <button onclick="goToSection(5)" id="tab5" class="section-tab rounded-lg py-2 px-1 text-center">5. Marketing</button>
+                </div>
+                <!-- Section Tabs Row 2 -->
+                <div class="grid grid-cols-5 gap-1 mb-6 text-xs font-medium">
+                    <button onclick="goToSection(6)" id="tab6" class="section-tab rounded-lg py-2 px-1 text-center">6. Brand</button>
+                    <button onclick="goToSection(7)" id="tab7" class="section-tab rounded-lg py-2 px-1 text-center">7. Academics</button>
+                    <button onclick="goToSection(8)" id="tab8" class="section-tab rounded-lg py-2 px-1 text-center">8. Market</button>
+                    <button onclick="goToSection(9)" id="tab9" class="section-tab rounded-lg py-2 px-1 text-center">9. Fees</button>
+                    <button onclick="goToSection(10)" id="tab10" class="section-tab rounded-lg py-2 px-1 text-center">10. Goals</button>
+                </div>
+
+                <!-- SECTION 1 -->
+                <div id="section1" class="field-section active space-y-4">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r-lg">
+                        <h3 class="font-bold text-blue-900">Section 1: Basic School Profile</h3>
+                        <p class="text-xs text-blue-700 mt-0.5">General information about your school</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-2"><label class="block text-sm font-medium text-gray-700 mb-1">School Name *</label><input type="text" id="schoolName" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Enter full school name"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">City / Area *</label><input type="text" id="location" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Pune, Kothrud"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Board *</label><select id="board" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select board</option><option>CBSE</option><option>ICSE</option><option>State Board</option><option>IB</option><option>Cambridge (IGCSE)</option><option>Other</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Year of Establishment</label><input type="text" id="yearEstd" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 2022 (currently in 3rd year)"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Classes Currently Running *</label><input type="text" id="classesRunning" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Nursery to Grade 8"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Total Staff Strength</label><input type="number" id="totalStaff" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Teaching + Non-teaching total"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">School Type</label><select id="schoolType" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select type</option><option>Co-ed</option><option>Boys Only</option><option>Girls Only</option><option>Residential</option><option>Day School</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Academic Year (Current)</label><input type="text" id="academicYear" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 2025-26"></div>
+                        <div class="col-span-2"><label class="block text-sm font-medium text-gray-700 mb-1">Fee Structure (per grade/term)</label><textarea id="feeStructure" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Nursery ₹45,000/yr, Gr 1-5 ₹60,000/yr. Is transport/books extra? Mention here."></textarea></div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2 -->
+                <div id="section2" class="field-section space-y-4">
+                    <div class="bg-green-50 border-l-4 border-green-500 p-3 rounded-r-lg">
+                        <h3 class="font-bold text-green-900">Section 2: Enrollment Data (Past Performance)</h3>
+                        <p class="text-xs text-green-700 mt-0.5">Historical enrollment numbers by year and grade</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Total Enrollment – Current Year *</label><input type="number" id="currentEnrollment" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 320"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Total Enrollment – Last Year *</label><input type="number" id="lastYearEnrollment" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 240"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Total Enrollment – 2 Years Ago</label><input type="number" id="twoYearsEnrollment" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 160"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">New Admissions – This Year *</label><input type="number" id="newAdmissions" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 110"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">New Admissions – Last Year</label><input type="number" id="lastYearAdmissions" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 90"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Students Who Left This Year (Attrition)</label><input type="number" id="attritionCount" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 30"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Attrition Rate (%) *</label><input type="number" id="attritionRate" step="0.1" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 9.5"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Grade with Highest Enrollment</label><input type="text" id="highestEnrollGrade" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Nursery / Grade 1"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Grade with Lowest Enrollment</label><input type="text" id="lowestEnrollGrade" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Grade 7 / Grade 8"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Primary Reason for Student Exits</label><select id="exitReason" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select reason</option><option>Relocation</option><option>Fee concerns</option><option>Dissatisfaction with quality</option><option>Competition (moved to rival school)</option><option>Don't know</option><option>Other</option></select></div>
+                    </div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">Grade-wise Current Enrollment Breakdown (optional)</label><textarea id="gradewiseEnrollment" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Nursery: 45, LKG: 42, UKG: 38, Gr1: 35, Gr2: 30..."></textarea></div>
+                </div>
+
+                <!-- SECTION 3 -->
+                <div id="section3" class="field-section space-y-4">
+                    <div class="bg-purple-50 border-l-4 border-purple-500 p-3 rounded-r-lg">
+                        <h3 class="font-bold text-purple-900">Section 3: Enrollment Funnel & Conversion Data</h3>
+                        <p class="text-xs text-purple-700 mt-0.5">Track each stage from inquiry to admission</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Total Inquiries Received *</label><input type="number" id="inquiries" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 480"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Campus Visits / Tours Conducted *</label><input type="number" id="visits" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 310"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Applications / Forms Submitted *</label><input type="number" id="applications" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 200"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Admission Offers Made</label><input type="number" id="offers" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 160"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Offers Accepted (Fee Paid / Enrolled)</label><input type="number" id="offersAccepted" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 110"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Avg. Response Time to Inquiry</label><select id="responseTime" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Within 1 hour</option><option>Same day</option><option>1–2 days</option><option>3–5 days</option><option>More than a week</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Avg. Days from Inquiry to Admission</label><input type="number" id="inquiryToAdmissionDays" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 14"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Top Reason Inquiries Don't Convert</label><select id="dropReason" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Fees too high</option><option>Location/distance</option><option>Competitor preferred</option><option>Slow follow-up</option><option>Not impressed during visit</option><option>Don't know</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Do You Use a CRM / Tracking System?</label><select id="crmUsage" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Yes – dedicated software</option><option>Yes – spreadsheet/manual</option><option>No tracking system</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Peak Admission Month(s)</label><input type="text" id="peakMonths" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Feb–April, October"></div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4 -->
+                <div id="section4" class="field-section space-y-4">
+                    <div class="bg-orange-50 border-l-4 border-orange-500 p-3 rounded-r-lg">
+                        <h3 class="font-bold text-orange-900">Section 4: Parent Demographics & Behaviour</h3>
+                        <p class="text-xs text-orange-700 mt-0.5">Understand who your parents are and what drives their decisions</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Primary Parent Profile</label><select id="parentProfile" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Corporate / Salaried professionals</option><option>Business owners / Self-employed</option><option>Government employees</option><option>Mixed</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Household Income Range (Majority)</label><select id="incomeRange" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Below ₹5 LPA</option><option>₹5–10 LPA</option><option>₹10–20 LPA</option><option>₹20 LPA+</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Top Factor Parents Choose Your School</label><select id="topChoiceFactor" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Academic reputation</option><option>Proximity / location</option><option>Fees / affordability</option><option>Infrastructure</option><option>Referral from friend</option><option>Board (CBSE/ICSE etc.)</option><option>Extracurricular</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Average Distance Parents Travel</label><select id="parentDistance" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Within 2 km</option><option>2–5 km</option><option>5–10 km</option><option>More than 10 km</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Parent Satisfaction Level</label><select id="parentSatisfaction" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Very High (NPS 8–10)</option><option>High (NPS 6–7)</option><option>Average (NPS 4–5)</option><option>Low (NPS 1–3)</option><option>Not measured</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">How Often Do Parents Refer Others?</label><select id="referralFrequency" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Actively (most parents refer)</option><option>Sometimes (on request)</option><option>Rarely</option><option>Almost never</option></select></div>
+                        <div class="col-span-2"><label class="block text-sm font-medium text-gray-700 mb-1">Top 2–3 Parent Complaints or Concerns</label><textarea id="parentComplaints" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Fee hikes without notice, lack of extracurriculars, communication gaps..."></textarea></div>
+                    </div>
+                </div>
+
+                <!-- SECTION 5 -->
+                <div id="section5" class="field-section space-y-4">
+                    <div class="bg-teal-50 border-l-4 border-teal-500 p-3 rounded-r-lg">
+                        <h3 class="font-bold text-teal-900">Section 5: Marketing & Visibility</h3>
+                        <p class="text-xs text-teal-700 mt-0.5">How are parents finding and discovering your school?</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Annual Marketing Budget (₹) *</label><input type="number" id="marketingBudget" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 300000"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Primary Lead Source *</label><select id="leadSource" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Word of mouth / Referrals</option><option>Google Ads</option><option>Facebook / Instagram</option><option>Walk-ins</option><option>School website</option><option>Hoardings / Print</option><option>Events / Exhibitions</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Do You Run Paid Digital Ads?</label><select id="paidAds" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Yes – regularly</option><option>Yes – seasonally (admission time)</option><option>Occasionally / tested</option><option>No</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">School Website Status</label><select id="websiteStatus" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Active and updated regularly</option><option>Exists but outdated</option><option>Basic / minimal</option><option>No website</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Social Media Presence</label><select id="socialMedia" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Active on FB + Instagram + YouTube</option><option>Active on FB + Instagram</option><option>Only Facebook</option><option>Minimal / Inactive</option><option>None</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Google My Business Listing</label><select id="googleBusiness" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Yes – active with reviews</option><option>Yes – but not managed</option><option>No listing</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Google Rating (if listed)</label><input type="text" id="googleRating" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 4.2 stars, 56 reviews"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Open House / Admission Events?</label><select id="openHouse" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Yes – multiple times a year</option><option>Yes – once a year</option><option>Occasionally</option><option>Never</option></select></div>
+                    </div>
+                </div>
+
+                <!-- SECTION 6 -->
+                <div id="section6" class="field-section space-y-4">
+                    <div class="bg-red-50 border-l-4 border-red-500 p-3 rounded-r-lg">
+                        <h3 class="font-bold text-red-900">Section 6: Brand Positioning & Reputation</h3>
+                        <p class="text-xs text-red-700 mt-0.5">How is your school perceived in the community?</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-2"><label class="block text-sm font-medium text-gray-700 mb-1">School's Unique Selling Proposition (USP)</label><textarea id="schoolUSP" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="What makes your school distinctly different? e.g., Holistic education, Sports focus, NEP-aligned, Small batch sizes..."></textarea></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Brand Awareness in Local Area</label><select id="brandAwareness" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Very well known</option><option>Known in nearby localities</option><option>Known only in immediate area</option><option>Not well known yet</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">School's Biggest Strength (parents' view)</label><select id="biggestStrength" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Teachers / Faculty quality</option><option>Infrastructure / facilities</option><option>Academic results</option><option>Values and culture</option><option>Extracurricular</option><option>Technology integration</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Biggest Perceived Weakness</label><select id="biggestWeakness" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>New school / Less track record</option><option>High fees</option><option>Limited classes/grades</option><option>Weak marketing / visibility</option><option>Infrastructure still developing</option><option>Not sure</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Clear Tagline / Brand Promise?</label><select id="tagline" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Yes – clearly communicated</option><option>Yes – but not consistently used</option><option>No</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Recent PR / Media Coverage?</label><select id="prCoverage" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Yes – regular news coverage</option><option>Yes – occasional</option><option>No</option></select></div>
+                        <div class="col-span-2"><label class="block text-sm font-medium text-gray-700 mb-1">Awards, Recognitions or Achievements</label><textarea id="awards" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Best new school 2024, CBSE affiliation, 100% board results..."></textarea></div>
+                    </div>
+                </div>
+
+                <!-- SECTION 7 -->
+                <div id="section7" class="field-section space-y-4">
+                    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-3 rounded-r-lg">
+                        <h3 class="font-bold text-indigo-900">Section 7: Academics & Student Experience</h3>
+                        <p class="text-xs text-indigo-700 mt-0.5">What happens inside the school that drives retention</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Average Class / Batch Size</label><input type="number" id="batchSize" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 25 students per class"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Student-to-Teacher Ratio</label><input type="text" id="studentTeacherRatio" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 20:1"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Academic Results / Performance</label><select id="academicPerformance" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Excellent – top results in area</option><option>Good – above average</option><option>Average</option><option>Still early to measure</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Teacher Retention / Stability</label><select id="teacherRetention" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>High – most teachers stay</option><option>Medium – some turnover</option><option>High turnover / Challenge</option></select></div>
+                        <div class="col-span-2"><label class="block text-sm font-medium text-gray-700 mb-1">Key Extracurricular / Programmes Offered</label><textarea id="extracurricular" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Sports, Dance, Music, Coding, Art, Robotics, Yoga, Theatre..."></textarea></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Technology in Classrooms</label><select id="techInClass" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Smart boards + digital learning</option><option>Projectors / basic tech</option><option>Minimal</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Parent Communication App / Tool</label><select id="parentApp" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Dedicated school app</option><option>WhatsApp groups</option><option>Email + phone</option><option>No structured system</option></select></div>
+                    </div>
+                </div>
+
+                <!-- SECTION 8 -->
+                <div id="section8" class="field-section space-y-4">
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg">
+                        <h3 class="font-bold text-yellow-900">Section 8: Local Market & Catchment Area</h3>
+                        <p class="text-xs text-yellow-700 mt-0.5">Understand the competitive landscape around you</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Competing Schools in 5 km Radius</label><select id="competitors" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>1–3 schools</option><option>4–7 schools</option><option>8–12 schools</option><option>More than 12</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Biggest Competitor School</label><input type="text" id="biggestCompetitor" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Name of primary competitor"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Why Parents Choose Competitor Over You</label><select id="competitorAdvantage" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Established brand / older school</option><option>Lower fees</option><option>Better academics / results</option><option>Better infrastructure</option><option>Closer location</option><option>Don't know</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">School-Age Children in Catchment (est.)</label><select id="catchmentSize" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Less than 2,000</option><option>2,000–5,000</option><option>5,000–10,000</option><option>More than 10,000</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Is the Area Growing? (New residential projects)</label><select id="areaGrowth" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Yes – rapidly growing</option><option>Yes – moderate growth</option><option>Stable / mature area</option><option>Declining population</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Feeder Preschools Nearby?</label><select id="feederSchools" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Yes – and we have partnerships</option><option>Yes – but no partnerships</option><option>No feeder schools nearby</option></select></div>
+                        <div class="col-span-2"><label class="block text-sm font-medium text-gray-700 mb-1">Key Localities / Neighbourhoods in Catchment</label><input type="text" id="keyLocalities" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Baner, Balewadi, Wakad, Hinjewadi"></div>
+                    </div>
+                </div>
+
+                <!-- SECTION 9 -->
+                <div id="section9" class="field-section space-y-4">
+                    <div class="bg-pink-50 border-l-4 border-pink-500 p-3 rounded-r-lg">
+                        <h3 class="font-bold text-pink-900">Section 9: Fee & Value Perception</h3>
+                        <p class="text-xs text-pink-700 mt-0.5">How families perceive your fee vis-à-vis value delivered</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Annual Fee Range (lowest to highest grade)</label><input type="text" id="feeRange" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., ₹40,000 – ₹80,000 per year"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Fees vs Local Competitor</label><select id="feeVsCompetitor" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>We are cheaper than most</option><option>Similar to competitors</option><option>We are 10–20% more expensive</option><option>We are 30%+ more expensive</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Do Parents Feel Fees Are Value for Money?</label><select id="valueMoney" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Yes – strongly</option><option>Yes – mostly</option><option>Mixed opinions</option><option>No – common complaint</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Fee Flexibility / Scholarships?</label><select id="scholarships" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Yes – merit scholarships</option><option>Yes – need-based support</option><option>Sibling discounts</option><option>No flexibility</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Is Fee Hike a Common Attrition Reason?</label><select id="feeHikeAttrition" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Yes – major reason</option><option>Occasionally mentioned</option><option>Rarely / No</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Payment Options Offered</label><select id="paymentOptions" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="">Select</option><option>Annual / Yearly only</option><option>Half-yearly</option><option>Quarterly</option><option>Monthly EMI</option></select></div>
+                    </div>
+                </div>
+
+                <!-- SECTION 10 -->
+                <div id="section10" class="field-section space-y-4">
+                    <div class="bg-blue-900 border-l-4 border-yellow-400 p-3 rounded-r-lg">
+                        <h3 class="font-bold text-white">Section 10: Enrollment Goals</h3>
+                        <p class="text-xs text-blue-200 mt-0.5">Set your targets — we'll build the entire plan around these</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Target Total Enrollment *</label><input type="number" id="targetEnrollment" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 500"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Target New Admissions *</label><input type="number" id="targetAdmissions" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 180"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Timeline to Achieve Goal</label><select id="timeline" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="4months" selected>4 months (Intensive – Recommended)</option><option value="6months">6 months</option><option value="1year">1 Academic Year</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Primary Focus</label><select id="focusArea" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="newadmissions">Increase New Admissions</option><option value="retention">Improve Student Retention</option><option value="both">Both Equally</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Plan Detail Level</label><select id="planDetail" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"><option value="standard">Standard Plan (Monthly milestones)</option><option value="detailed">Detailed Plan (Week-by-week actionables)</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Additional Marketing Budget Available (%)</label><input type="number" id="budgetIncrease" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 20" value="0"></div>
+                        <div class="col-span-2"><label class="block text-sm font-medium text-gray-700 mb-1">Any Additional Context or Challenges?</label><textarea id="additionalContext" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., New competitor opened nearby, planning to add Grade 9, budget constraints, specific events planned..."></textarea></div>
+                    </div>
+                </div>
+
+                <!-- Nav Buttons -->
+                <div class="flex justify-between mt-6 pt-4 border-t border-gray-100">
+                    <button id="prevBtn" onclick="changeSection(-1)" class="hidden px-5 py-2.5 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition text-sm">← Previous</button>
+                    <div class="flex gap-3 ml-auto">
+                        <button id="nextBtn" onclick="changeSection(1)" class="px-6 py-2.5 bg-blue-700 text-white font-semibold rounded-lg hover:bg-blue-800 transition text-sm">Next Section →</button>
+                        <button id="generateBtn" onclick="generateStrategy()" class="hidden px-6 py-2.5 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition text-sm">🚀 Generate My Strategy</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: LOADING -->
+            <div id="step3" class="step-container">
+                <div class="text-center py-16">
+                    <div class="loader mx-auto mb-6"></div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Running Deep Diagnostics...</h2>
+                    <p class="text-gray-500 text-sm mb-6">AI is analysing all 10 sections of your school data</p>
+                    <div id="analysisProgress" class="text-sm text-blue-700 font-medium bg-blue-50 px-5 py-2 rounded-full inline-block mb-8"></div>
+                    <div><button onclick="goBackToForm()" class="px-4 py-2 bg-gray-200 text-gray-600 text-sm rounded-lg hover:bg-gray-300 transition">← Back to Edit Data</button></div>
+                </div>
+            </div>
+
+            <!-- STEP 4: STRATEGY OUTPUT -->
+            <div id="step4" class="step-container">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Your Customised Growth Strategy</h2>
+                        <p class="text-sm text-gray-500">Based on complete 10-section diagnostic · <span id="schoolNameDisplay" class="font-semibold text-blue-700"></span></p>
+                    </div>
+                    <button onclick="downloadStrategy()" class="px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition flex-shrink-0">⬇ Download Report</button>
+                </div>
+                <div id="strategyOutput" class="space-y-4"></div>
+                <div class="flex gap-3 mt-8 pt-6 border-t border-gray-100">
+                    <button onclick="goBackToSection(10)" class="flex-1 px-4 py-2.5 bg-gray-400 text-white text-sm font-semibold rounded-lg hover:bg-gray-500 transition">← Edit Goals</button>
+                    <button onclick="goBackToForm()" class="flex-1 px-4 py-2.5 bg-gray-500 text-white text-sm font-semibold rounded-lg hover:bg-gray-600 transition">← Edit All Data</button>
+                    <button onclick="resetSystem()" class="flex-1 px-4 py-2.5 bg-blue-900 text-white text-sm font-semibold rounded-lg hover:bg-blue-800 transition">🔄 New Analysis</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <p class="text-center text-xs text-gray-400 mt-4">© 2026 Rootscare Foundation · RCF Admission Diagnostics & Strategy System</p>
+</div>
+
+<script>
+    let currentSection = 1;
+    let schoolData = {};
+    let goalsData = {};
+
+    function updateProgress(step) {
+        const elems = { 'prog-data': 1, 'prog-analysis': 2, 'prog-strategy': 3 };
+        const bar = { 1: '10%', 2: '65%', 3: '100%' };
+        Object.entries(elems).forEach(([id, s]) => {
+            document.getElementById(id).className = s <= step ? 'font-semibold text-white' : 'text-blue-300';
+        });
+        document.getElementById('progress-bar').style.width = bar[step] || '10%';
+    }
+
+    function goToSection(n) {
+        document.getElementById('section' + currentSection).classList.remove('active');
+        document.getElementById('tab' + currentSection).classList.remove('active');
+        currentSection = n;
+        document.getElementById('section' + n).classList.add('active');
+        document.getElementById('tab' + n).classList.add('active');
+        document.getElementById('section-counter').textContent = 'Section ' + n + ' of 10';
+        document.getElementById('prevBtn').classList.toggle('hidden', n === 1);
+        document.getElementById('nextBtn').classList.toggle('hidden', n === 10);
+        document.getElementById('generateBtn').classList.toggle('hidden', n !== 10);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function changeSection(dir) {
+        const next = currentSection + dir;
+        if (next >= 1 && next <= 10) goToSection(next);
+    }
+
+    function goBackToForm() {
+        document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
+        document.getElementById('step1').classList.add('active');
+        updateProgress(1);
+    }
+
+    function goBackToSection(n) {
+        goBackToForm();
+        goToSection(n);
+    }
+
+    function collectAllData() {
+        const g = id => (document.getElementById(id)||{}).value||'';
+        const n = id => parseInt(g(id))||0;
+        const f = id => parseFloat(g(id))||0;
+        schoolData = {
+            schoolName:g('schoolName'),location:g('location'),board:g('board'),yearEstd:g('yearEstd'),
+            classesRunning:g('classesRunning'),totalStaff:n('totalStaff'),feeStructure:g('feeStructure'),
+            academicYear:g('academicYear'),schoolType:g('schoolType'),
+            currentEnrollment:n('currentEnrollment'),lastYearEnrollment:n('lastYearEnrollment'),
+            twoYearsEnrollment:n('twoYearsEnrollment'),newAdmissions:n('newAdmissions'),
+            lastYearAdmissions:n('lastYearAdmissions'),attritionCount:n('attritionCount'),
+            attritionRate:f('attritionRate'),highestEnrollGrade:g('highestEnrollGrade'),
+            lowestEnrollGrade:g('lowestEnrollGrade'),exitReason:g('exitReason'),
+            gradewiseEnrollment:g('gradewiseEnrollment'),
+            inquiries:n('inquiries'),visits:n('visits'),applications:n('applications'),
+            offers:n('offers'),offersAccepted:n('offersAccepted'),responseTime:g('responseTime'),
+            inquiryToAdmissionDays:n('inquiryToAdmissionDays'),dropReason:g('dropReason'),
+            crmUsage:g('crmUsage'),peakMonths:g('peakMonths'),
+            parentProfile:g('parentProfile'),incomeRange:g('incomeRange'),
+            topChoiceFactor:g('topChoiceFactor'),parentDistance:g('parentDistance'),
+            parentSatisfaction:g('parentSatisfaction'),referralFrequency:g('referralFrequency'),
+            parentComplaints:g('parentComplaints'),
+            marketingBudget:n('marketingBudget'),leadSource:g('leadSource'),paidAds:g('paidAds'),
+            websiteStatus:g('websiteStatus'),socialMedia:g('socialMedia'),googleBusiness:g('googleBusiness'),
+            googleRating:g('googleRating'),openHouse:g('openHouse'),
+            schoolUSP:g('schoolUSP'),brandAwareness:g('brandAwareness'),biggestStrength:g('biggestStrength'),
+            biggestWeakness:g('biggestWeakness'),tagline:g('tagline'),prCoverage:g('prCoverage'),awards:g('awards'),
+            batchSize:n('batchSize'),studentTeacherRatio:g('studentTeacherRatio'),
+            academicPerformance:g('academicPerformance'),teacherRetention:g('teacherRetention'),
+            extracurricular:g('extracurricular'),techInClass:g('techInClass'),parentApp:g('parentApp'),
+            competitors:g('competitors'),biggestCompetitor:g('biggestCompetitor'),
+            competitorAdvantage:g('competitorAdvantage'),catchmentSize:g('catchmentSize'),
+            areaGrowth:g('areaGrowth'),feederSchools:g('feederSchools'),keyLocalities:g('keyLocalities'),
+            feeRange:g('feeRange'),feeVsCompetitor:g('feeVsCompetitor'),valueMoney:g('valueMoney'),
+            scholarships:g('scholarships'),feeHikeAttrition:g('feeHikeAttrition'),paymentOptions:g('paymentOptions'),
+        };
+        goalsData = {
+            targetEnrollment:n('targetEnrollment'),targetAdmissions:n('targetAdmissions'),
+            timeline:g('timeline'),focusArea:g('focusArea'),planDetail:g('planDetail'),
+            budgetIncrease:n('budgetIncrease'),additionalContext:g('additionalContext'),
+        };
+    }
+
+    async function generateStrategy() {
+        collectAllData();
+        if (!schoolData.schoolName || !schoolData.currentEnrollment) {
+            alert('Please fill in at least School Name (Section 1) and Current Enrollment (Section 2)'); return;
         }
-
-        function goToStep1() {
-            // Restore data if it exists
-            if (Object.keys(schoolData).length > 0) {
-                document.getElementById('schoolName').value = schoolData.schoolName || '';
-                document.getElementById('academicYear').value = schoolData.academicYear || '';
-                document.getElementById('schoolType').value = schoolData.schoolType || '';
-                document.getElementById('currentEnrollment').value = schoolData.currentEnrollment || '';
-                document.getElementById('lastYearEnrollment').value = schoolData.lastYearEnrollment || '';
-                document.getElementById('newAdmissions').value = schoolData.newAdmissions || '';
-                document.getElementById('attritionRate').value = schoolData.attritionRate || '';
-                document.getElementById('inquiries').value = schoolData.inquiries || '';
-                document.getElementById('visits').value = schoolData.visits || '';
-                document.getElementById('applications').value = schoolData.applications || '';
-                document.getElementById('offers').value = schoolData.offers || '';
-                document.getElementById('marketingBudget').value = schoolData.marketingBudget || '';
-                document.getElementById('leadSource').value = schoolData.leadSource || '';
-            }
-            
-            document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
-            document.getElementById('step1').classList.add('active');
-            updateProgress(1);
+        if (!goalsData.targetAdmissions) {
+            alert('Please enter your Target New Admissions in Section 10'); return;
         }
+        document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
+        document.getElementById('step3').classList.add('active');
+        updateProgress(2);
 
-        function goToStep2() {
-            // Collect data from step 1 only if we're coming from step 1
-            if (document.getElementById('step1').classList.contains('active')) {
-                schoolData = {
-                    schoolName: document.getElementById('schoolName').value,
-                    academicYear: document.getElementById('academicYear').value,
-                    schoolType: document.getElementById('schoolType').value,
-                    currentEnrollment: parseInt(document.getElementById('currentEnrollment').value) || 0,
-                    lastYearEnrollment: parseInt(document.getElementById('lastYearEnrollment').value) || 0,
-                    newAdmissions: parseInt(document.getElementById('newAdmissions').value) || 0,
-                    attritionRate: parseFloat(document.getElementById('attritionRate').value) || 0,
-                    inquiries: parseInt(document.getElementById('inquiries').value) || 0,
-                    visits: parseInt(document.getElementById('visits').value) || 0,
-                    applications: parseInt(document.getElementById('applications').value) || 0,
-                    offers: parseInt(document.getElementById('offers').value) || 0,
-                    marketingBudget: parseInt(document.getElementById('marketingBudget').value) || 0,
-                    leadSource: document.getElementById('leadSource').value
-                };
+        const msgs = ['Analysing enrollment trends...','Evaluating admission funnel...','Profiling parent demographics...','Assessing brand & market position...','Calculating conversion rates...','Benchmarking against competition...','Identifying growth levers...','Building your strategic plan...'];
+        let i = 0;
+        const ticker = setInterval(() => { document.getElementById('analysisProgress').textContent = msgs[i++ % msgs.length]; }, 900);
+        try { await callClaudeAPI(); } finally { clearInterval(ticker); }
+    }
 
-                // Validate required fields
-                if (!schoolData.schoolName || !schoolData.currentEnrollment) {
-                    alert('Please fill in at least School Name and Current Enrollment');
-                    return;
-                }
-            }
-            
-            // Restore goals data if it exists
-            if (Object.keys(goalsData).length > 0) {
-                document.getElementById('targetEnrollment').value = goalsData.targetEnrollment || '';
-                document.getElementById('targetAdmissions').value = goalsData.targetAdmissions || '';
-                document.getElementById('timeline').value = goalsData.timeline || '4months';
-                document.getElementById('focusArea').value = goalsData.focusArea || 'newadmissions';
-                document.getElementById('planDetail').value = goalsData.planDetail || 'standard';
-                document.getElementById('budgetIncrease').value = goalsData.budgetIncrease || 0;
-                document.getElementById('additionalContext').value = goalsData.additionalContext || '';
-            }
+    async function callClaudeAPI() {
+        const timelineText = goalsData.timeline === '4months' ? '4 months (16 weeks)' : goalsData.timeline === '6months' ? '6 months (24 weeks)' : '1 academic year';
+        const prompt = `You are an expert education consultant for Indian K-12 schools working with Rootscare Foundation. Analyse this complete 10-section school diagnostic and generate a highly specific, data-driven strategic plan.
 
-            document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
-            document.getElementById('step2').classList.add('active');
-            updateProgress(2);
-        }
+SCHOOL: ${schoolData.schoolName} | ${schoolData.location} | ${schoolData.board} | ${schoolData.classesRunning}
+ESTABLISHED: ${schoolData.yearEstd} | STAFF: ${schoolData.totalStaff} | TYPE: ${schoolData.schoolType}
+FEES: ${schoolData.feeStructure}
 
-        async function generateStrategy() {
-            // Collect goals data
-            goalsData = {
-                targetEnrollment: parseInt(document.getElementById('targetEnrollment').value) || 0,
-                targetAdmissions: parseInt(document.getElementById('targetAdmissions').value) || 0,
-                timeline: document.getElementById('timeline').value,
-                focusArea: document.getElementById('focusArea').value,
-                planDetail: document.getElementById('planDetail').value,
-                budgetIncrease: parseInt(document.getElementById('budgetIncrease').value) || 0,
-                additionalContext: document.getElementById('additionalContext').value
-            };
+ENROLLMENT HISTORY:
+- Current Year: ${schoolData.currentEnrollment} | Last Year: ${schoolData.lastYearEnrollment} | 2 Years Ago: ${schoolData.twoYearsEnrollment}
+- New Admissions This Year: ${schoolData.newAdmissions} | Last Year: ${schoolData.lastYearAdmissions}
+- Students Left: ${schoolData.attritionCount} | Attrition Rate: ${schoolData.attritionRate}%
+- Highest Grade: ${schoolData.highestEnrollGrade} | Lowest Grade: ${schoolData.lowestEnrollGrade}
+- Exit Reason: ${schoolData.exitReason} | Grade-wise: ${schoolData.gradewiseEnrollment}
 
-            if (!goalsData.targetEnrollment) {
-                alert('Please enter target enrollment');
-                return;
-            }
+FUNNEL DATA:
+- Inquiries: ${schoolData.inquiries} → Visits: ${schoolData.visits} → Applications: ${schoolData.applications} → Offers: ${schoolData.offers} → Enrolled: ${schoolData.offersAccepted}
+- Response Time: ${schoolData.responseTime} | Days to Admit: ${schoolData.inquiryToAdmissionDays}
+- Drop Reason: ${schoolData.dropReason} | CRM: ${schoolData.crmUsage} | Peak Months: ${schoolData.peakMonths}
 
-            // Show loading step
-            document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
-            document.getElementById('step3').classList.add('active');
-            updateProgress(3);
+PARENT PROFILE:
+- Profile: ${schoolData.parentProfile} | Income: ${schoolData.incomeRange}
+- Choice Factor: ${schoolData.topChoiceFactor} | Distance: ${schoolData.parentDistance}
+- Satisfaction: ${schoolData.parentSatisfaction} | Referrals: ${schoolData.referralFrequency}
+- Complaints: ${schoolData.parentComplaints}
 
-            // Simulate analysis progress
-            const progressMessages = [
-                'Analyzing current enrollment trends...',
-                'Evaluating admission funnel performance...',
-                'Calculating conversion rates...',
-                'Identifying growth opportunities...',
-                'Generating strategic recommendations...'
-            ];
+MARKETING:
+- Budget: ₹${schoolData.marketingBudget} | Lead Source: ${schoolData.leadSource}
+- Paid Ads: ${schoolData.paidAds} | Website: ${schoolData.websiteStatus}
+- Social Media: ${schoolData.socialMedia} | Google: ${schoolData.googleBusiness} (${schoolData.googleRating})
+- Open House: ${schoolData.openHouse}
 
-            for (let i = 0; i < progressMessages.length; i++) {
-                document.getElementById('analysisProgress').textContent = progressMessages[i];
-                await new Promise(resolve => setTimeout(resolve, 800));
-            }
+BRAND & REPUTATION:
+- USP: ${schoolData.schoolUSP} | Awareness: ${schoolData.brandAwareness}
+- Strength: ${schoolData.biggestStrength} | Weakness: ${schoolData.biggestWeakness}
+- Tagline: ${schoolData.tagline} | PR: ${schoolData.prCoverage} | Awards: ${schoolData.awards}
 
-            // Generate strategy using Claude API
-            await callClaudeAPI();
-        }
+ACADEMICS & EXPERIENCE:
+- Batch Size: ${schoolData.batchSize} | Ratio: ${schoolData.studentTeacherRatio}
+- Results: ${schoolData.academicPerformance} | Teacher Retention: ${schoolData.teacherRetention}
+- Extracurricular: ${schoolData.extracurricular} | Tech: ${schoolData.techInClass} | Parent App: ${schoolData.parentApp}
 
-        async function callClaudeAPI() {
-            const prompt = `You are an expert education consultant specializing in school enrollment growth strategies. Analyze the following school data and goals, then provide a comprehensive, actionable strategic plan.
+LOCAL MARKET:
+- Competitors Nearby: ${schoolData.competitors} | Biggest: ${schoolData.biggestCompetitor}
+- Why They Choose Competitor: ${schoolData.competitorAdvantage}
+- Catchment Children: ${schoolData.catchmentSize} | Area Growth: ${schoolData.areaGrowth}
+- Feeder Schools: ${schoolData.feederSchools} | Key Areas: ${schoolData.keyLocalities}
 
-CRITICAL CONTEXT: This is a ${goalsData.timeline} INTENSIVE PROGRAM designed to achieve admission targets rapidly. The plan must be aggressive, time-bound, and action-oriented with clear weekly/daily execution steps.
-
-SCHOOL DATA:
-${JSON.stringify(schoolData, null, 2)}
+FEES & VALUE:
+- Range: ${schoolData.feeRange} | vs Competitors: ${schoolData.feeVsCompetitor}
+- Value Perception: ${schoolData.valueMoney} | Scholarships: ${schoolData.scholarships}
+- Fee Hike Attrition: ${schoolData.feeHikeAttrition} | Payment: ${schoolData.paymentOptions}
 
 GOALS:
-${JSON.stringify(goalsData, null, 2)}
+- Target Enrollment: ${goalsData.targetEnrollment} | Target New Admissions: ${goalsData.targetAdmissions}
+- Timeline: ${timelineText} | Focus: ${goalsData.focusArea} | Plan Type: ${goalsData.planDetail}
+- Extra Budget: ${goalsData.budgetIncrease}% | Context: ${goalsData.additionalContext}
 
-PLAN DETAIL LEVEL: ${goalsData.planDetail === 'detailed' ? 'DETAILED (Week-by-week actionables required)' : 'STANDARD (Monthly milestones)'}
+Generate a HIGHLY SPECIFIC strategy report in clean HTML. Every insight must reference actual data above. Structure:
 
-Please provide a detailed analysis and strategy that includes:
+<h2 style="color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px">🔍 1. Enrollment Diagnostic Summary</h2>
+[Key metrics, calculated conversion rates at each funnel stage, YoY growth analysis, attrition analysis — all with actual numbers]
 
-1. CURRENT STATE ANALYSIS
-   - Key metrics summary
-   - Enrollment growth rate
-   - Admission funnel conversion rates
-   - Critical gaps and immediate opportunities
+<h2 style="color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px">📊 2. Gap Analysis</h2>
+[Exact gap, required weekly admission rate, honest feasibility assessment]
 
-2. GAP ANALYSIS & FEASIBILITY
-   - Gap between current and target enrollment
-   - Required new admissions vs historical performance
-   - Realistic achievement assessment for ${goalsData.timeline} timeline
-   - Critical success factors
+<h2 style="color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px">🎯 3. Root Cause Analysis</h2>
+[Top 3-5 actual barriers specific to this school's data — reference their real answers]
 
-3. STRATEGIC RECOMMENDATIONS (prioritized for speed)
-   - Specific, actionable strategies numbered and prioritized by urgency
-   - For each strategy include: description, expected impact, quick-win potential, timeline, and resources needed
-   - Focus on high-impact, fast-execution tactics
+<h2 style="color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px">🚀 4. Prioritised Strategic Recommendations</h2>
+[6+ specific strategies, each: what, why (citing their data), impact, owner, timeline]
 
-4. INTENSIVE MARKETING & OUTREACH PLAN
-   - Rapid lead generation tactics
-   - Recommended channels prioritized by speed-to-results
-   - Budget allocation for maximum ROI
-   - Daily/weekly lead generation targets
-   - Emergency tactics if targets are missed
+<h2 style="color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px">📣 5. Marketing & Lead Generation Plan</h2>
+[Channel-specific plan using their actual budget of ₹${schoolData.marketingBudget}, weekly targets]
 
-5. CONVERSION ACCELERATION PLAN
-   - Speed up inquiry-to-admission cycle
-   - Fast-track admission processes
-   - Immediate follow-up protocols
-   - Visit-to-enrollment conversion boosters
+<h2 style="color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px">🔄 6. Admission Funnel Optimisation</h2>
+[Fix their specific weak links, conversion targets based on their data]
 
-6. ${goalsData.planDetail === 'detailed' ? 'WEEK-BY-WEEK IMPLEMENTATION ROADMAP (16 weeks)' : 'MONTH-BY-MONTH IMPLEMENTATION ROADMAP (4 months)'}
-   ${goalsData.planDetail === 'detailed' ? 
-   `- Provide DETAILED week-by-week breakdown for all 16 weeks
-   - Each week should include:
-     * Specific tasks and action items with owners
-     * Daily activities where applicable
-     * Target metrics for the week
-     * Deliverables and checkpoints
-     * Key decisions to be made
-   - Format: Week 1, Week 2, etc. with clear subsections` 
-   : 
-   `- Monthly milestones with key activities
-   - Weekly target breakdown within each month
-   - Key performance indicators (KPIs)
-   - Success metrics and checkpoints`}
+<h2 style="color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px">❤️ 7. Retention & Parent Satisfaction Plan</h2>
+[Address their specific attrition reasons and parent complaints]
 
-7. RISK FACTORS & CONTINGENCY PLANS
-   - What if targets are missed at Week 4, 8, 12?
-   - Backup strategies and escalation plans
-   - Resource constraints and mitigation
+${goalsData.planDetail === 'detailed' ? `<h2 style="color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px">📅 8. Week-by-Week Roadmap (16 Weeks)</h2>
+[Each week: specific tasks, owner, targets, admission milestone, red flag triggers]` : `<h2 style="color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px">📅 8. Month-by-Month Roadmap</h2>
+[Each month: key activities, targets, checkpoints]`}
 
-8. TEAM STRUCTURE & RESPONSIBILITIES
-   - Who needs to do what
-   - Daily/weekly routines for admission team
-   - Accountability framework
+<h2 style="color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px">📈 9. KPIs & Weekly Dashboard</h2>
+[Specific measurable targets based on their data]
 
-Format your response in clear HTML with appropriate headings, lists, and emphasis. Use professional styling with color-coded sections. Be extremely specific with numbers, percentages, and timelines. This is a time-sensitive, aggressive growth plan - reflect that urgency in your recommendations.`;
+<h2 style="color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px">⚠️ 10. Risks & Contingency Plans</h2>
+[Specific to their competitive situation, what to do if behind at Week 4, 8, 12]
 
-            try {
-                const response = await fetch("https://api.anthropic.com/v1/messages", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        model: "claude-sonnet-4-20250514",
-                        max_tokens: 4000,
-                        messages: [
-                            { role: "user", content: prompt }
-                        ],
-                    })
-                });
+Use colored boxes, tables, and bullet points. Make it look like a professional consultant report. Be very specific — no generic advice.`;
 
-                const data = await response.json();
-                const strategyContent = data.content[0].text;
-
-                // Display strategy
-                displayStrategy(strategyContent);
-            } catch (error) {
-                console.error('Error calling Claude API:', error);
-                displayStrategy(generateFallbackStrategy());
-            }
+        try {
+            const response = await fetch("https://api.anthropic.com/v1/messages", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 4000, messages: [{ role: "user", content: prompt }] })
+            });
+            const data = await response.json();
+            const content = data.content && data.content[0] ? data.content[0].text : null;
+            displayStrategy(content || generateFallbackStrategy());
+        } catch (err) {
+            console.error(err);
+            displayStrategy(generateFallbackStrategy());
         }
+    }
 
-        function displayStrategy(content) {
-            document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
-            document.getElementById('step4').classList.add('active');
-            updateProgress(4);
-
-            const outputDiv = document.getElementById('strategyOutput');
-            outputDiv.innerHTML = `
-                <div class="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6">
-                    <h3 class="font-bold text-lg text-blue-900">Strategic Plan for ${schoolData.schoolName}</h3>
-                    <p class="text-sm text-blue-800">Academic Year: ${schoolData.academicYear} | Generated: ${new Date().toLocaleDateString()}</p>
+    function displayStrategy(content) {
+        document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
+        document.getElementById('step4').classList.add('active');
+        updateProgress(3);
+        document.getElementById('schoolNameDisplay').textContent = schoolData.schoolName;
+        const gap = goalsData.targetEnrollment - schoolData.currentEnrollment;
+        const conv = schoolData.inquiries ? ((schoolData.newAdmissions/schoolData.inquiries)*100).toFixed(1) : 'N/A';
+        const growth = schoolData.lastYearEnrollment ? (((schoolData.currentEnrollment-schoolData.lastYearEnrollment)/schoolData.lastYearEnrollment)*100).toFixed(1) : 'N/A';
+        const tl = goalsData.timeline === '4months' ? '4-Month' : goalsData.timeline === '6months' ? '6-Month' : '1-Year';
+        document.getElementById('strategyOutput').innerHTML = `
+            <div class="bg-blue-900 text-white p-5 rounded-xl mb-2">
+                <div class="flex justify-between items-start flex-wrap gap-2">
+                    <div>
+                        <h3 class="font-bold text-lg">${schoolData.schoolName} · ${schoolData.location}</h3>
+                        <p class="text-blue-200 text-sm mt-0.5">${schoolData.board} · ${schoolData.classesRunning} · Generated ${new Date().toLocaleDateString('en-IN')}</p>
+                    </div>
+                    <span class="bg-yellow-400 text-blue-900 text-xs font-bold px-3 py-1.5 rounded-full">${tl} Intensive Plan</span>
                 </div>
-                <div class="prose max-w-none">${content}</div>
-            `;
-        }
-
-        function generateFallbackStrategy() {
-            const enrollmentGap = goalsData.targetEnrollment - schoolData.currentEnrollment;
-            const growthRate = ((schoolData.currentEnrollment - schoolData.lastYearEnrollment) / schoolData.lastYearEnrollment * 100).toFixed(1);
-            const inquiryToAdmission = ((schoolData.newAdmissions / schoolData.inquiries) * 100).toFixed(1);
-            const visitToApp = ((schoolData.applications / schoolData.visits) * 100).toFixed(1);
-            const offerToEnroll = ((schoolData.newAdmissions / schoolData.offers) * 100).toFixed(1);
-            const isDetailed = goalsData.planDetail === 'detailed';
-            const timelineText = goalsData.timeline === '4months' ? '4 months (16 weeks)' : goalsData.timeline === '6months' ? '6 months' : '12 months';
-            const weeksTotal = goalsData.timeline === '4months' ? 16 : goalsData.timeline === '6months' ? 24 : 52;
-            const admissionsPerWeek = Math.ceil(goalsData.targetAdmissions / weeksTotal);
-
-            return `
-                <div class="space-y-6">
-                    <div class="bg-gradient-to-r from-red-50 to-orange-50 p-6 rounded-lg border-2 border-orange-300">
-                        <h2 class="text-2xl font-bold text-orange-900 mb-2">⚡ INTENSIVE ${timelineText.toUpperCase()} ADMISSION ACCELERATION PROGRAM</h2>
-                        <p class="text-gray-700 font-semibold">Launch Date: ${new Date().toLocaleDateString()} | Deadline: ${new Date(Date.now() + (weeksTotal * 7 * 24 * 60 * 60 * 1000)).toLocaleDateString()}</p>
-                        <div class="mt-3 p-3 bg-white rounded-lg">
-                            <p class="text-lg font-bold text-red-700">TARGET: ${goalsData.targetAdmissions} New Admissions in ${timelineText}</p>
-                            <p class="text-md text-gray-700">Required Rate: <strong>${admissionsPerWeek} admissions/week</strong> or <strong>${Math.ceil(admissionsPerWeek/7)} admissions/day</strong></p>
-                        </div>
-                    </div>
-
-                    <section class="bg-white p-6 rounded-lg border border-gray-200">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">1. Current State Analysis</h2>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-blue-50 p-4 rounded">
-                                <p class="text-sm text-gray-600">Current Enrollment</p>
-                                <p class="text-2xl font-bold text-blue-900">${schoolData.currentEnrollment}</p>
-                            </div>
-                            <div class="bg-green-50 p-4 rounded">
-                                <p class="text-sm text-gray-600">YoY Growth Rate</p>
-                                <p class="text-2xl font-bold text-green-900">${growthRate}%</p>
-                            </div>
-                            <div class="bg-purple-50 p-4 rounded">
-                                <p class="text-sm text-gray-600">Inquiry → Admission</p>
-                                <p class="text-2xl font-bold text-purple-900">${inquiryToAdmission}%</p>
-                            </div>
-                            <div class="bg-yellow-50 p-4 rounded">
-                                <p class="text-sm text-gray-600">Attrition Rate</p>
-                                <p class="text-2xl font-bold text-yellow-900">${schoolData.attritionRate}%</p>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <h3 class="font-semibold text-gray-800 mb-2">Conversion Funnel Analysis:</h3>
-                            <ul class="list-disc list-inside text-gray-700 space-y-1">
-                                <li>Inquiries to Visits: ${((schoolData.visits/schoolData.inquiries)*100).toFixed(1)}%</li>
-                                <li>Visits to Applications: ${visitToApp}%</li>
-                                <li>Applications to Offers: ${((schoolData.offers/schoolData.applications)*100).toFixed(1)}%</li>
-                                <li>Offers to Enrollment: ${offerToEnroll}%</li>
-                            </ul>
-                        </div>
-                    </section>
-
-                    <section class="bg-white p-6 rounded-lg border border-gray-200">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">2. Gap Analysis & Urgency Assessment</h2>
-                        <div class="bg-red-50 p-4 rounded-lg mb-4 border-2 border-red-300">
-                            <p class="font-semibold text-gray-800">Enrollment Gap: <span class="text-red-700 text-2xl">${enrollmentGap} students</span></p>
-                            <p class="text-sm text-gray-600 mt-2">Required Growth: ${((enrollmentGap/schoolData.currentEnrollment)*100).toFixed(1)}% in just ${timelineText}</p>
-                            <p class="text-sm font-semibold text-red-700 mt-2">⚠️ This requires ${admissionsPerWeek}x your current weekly admission rate!</p>
-                        </div>
-                        <div class="bg-yellow-50 p-4 rounded-lg">
-                            <h3 class="font-semibold text-gray-800 mb-2">Required Lead Volume:</h3>
-                            <ul class="list-disc list-inside text-gray-700">
-                                <li>Based on current ${inquiryToAdmission}% conversion: Need <strong>${Math.ceil(goalsData.targetAdmissions / (inquiryToAdmission/100))} total inquiries</strong></li>
-                                <li>That's <strong>${Math.ceil((goalsData.targetAdmissions / (inquiryToAdmission/100)) / weeksTotal)} inquiries per week</strong></li>
-                                <li>Current inquiry rate: ${Math.round(schoolData.inquiries/52)} per week - needs <strong>${(((goalsData.targetAdmissions / (inquiryToAdmission/100)) / weeksTotal) / (schoolData.inquiries/52)).toFixed(1)}x increase</strong></li>
-                            </ul>
-                        </div>
-                    </section>
-
-                    <section class="bg-white p-6 rounded-lg border border-gray-200">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">3. RAPID EXECUTION STRATEGIES (Prioritized)</h2>
-                        <div class="space-y-4">
-                            <div class="border-l-4 border-red-500 pl-4 bg-red-50 p-3">
-                                <h3 class="font-semibold text-gray-800 text-lg">🚨 PRIORITY 1: EMERGENCY LEAD GENERATION BLITZ</h3>
-                                <p class="text-gray-700 mt-2 font-semibold">DAYS 1-7: Immediate Actions</p>
-                                <ul class="list-disc list-inside text-gray-700 mt-2 ml-4 space-y-1">
-                                    <li><strong>Day 1:</strong> Launch paid Facebook/Instagram ads (₹${Math.round(schoolData.marketingBudget * 0.4 / 4)}/month budget)</li>
-                                    <li><strong>Day 1:</strong> Start Google Ads campaign targeting local searches</li>
-                                    <li><strong>Day 2-3:</strong> Call ALL previous inquiries from last 12 months</li>
-                                    <li><strong>Day 3:</strong> Send SMS campaign to all past inquiry database</li>
-                                    <li><strong>Day 4-7:</strong> Host emergency "Open House Weekend"</li>
-                                    <li><strong>Day 5:</strong> Launch referral program with ₹5,000 incentive</li>
-                                    <li><strong>Week 1 Target:</strong> Generate 50+ new inquiries</li>
-                                </ul>
-                                <p class="text-sm text-red-700 mt-2 font-semibold">Expected Impact: 60-80 inquiries in Week 1 | 15-25 admissions</p>
-                            </div>
-
-                            <div class="border-l-4 border-orange-500 pl-4 bg-orange-50 p-3">
-                                <h3 class="font-semibold text-gray-800 text-lg">🔥 PRIORITY 2: CONVERSION SPEED OPTIMIZATION</h3>
-                                <p class="text-gray-700 mt-2">Compress admission timeline from inquiry to enrollment</p>
-                                <ul class="list-disc list-inside text-gray-700 mt-2 ml-4 space-y-1">
-                                    <li><strong>Implement:</strong> 30-minute response time SLA for all inquiries</li>
-                                    <li><strong>Create:</strong> Same-day campus visit scheduling</li>
-                                    <li><strong>Launch:</strong> Instant online application portal</li>
-                                    <li><strong>Offer:</strong> 24-hour admission decision turnaround</li>
-                                    <li><strong>Provide:</strong> On-spot admission for walk-ins (if qualified)</li>
-                                    <li><strong>Deploy:</strong> WhatsApp chatbot for instant query response</li>
-                                </ul>
-                                <p class="text-sm text-orange-700 mt-2 font-semibold">Expected Impact: Increase conversion from ${inquiryToAdmission}% to 35%+</p>
-                            </div>
-
-                            <div class="border-l-4 border-yellow-500 pl-4 bg-yellow-50 p-3">
-                                <h3 class="font-semibold text-gray-800 text-lg">⚡ PRIORITY 3: COMMUNITY ACTIVATION BLITZ</h3>
-                                <ul class="list-disc list-inside text-gray-700 mt-2 ml-4 space-y-1">
-                                    <li><strong>Week 1:</strong> Parent referral campaign - ₹5,000 per successful referral</li>
-                                    <li><strong>Week 2:</strong> Alumni network activation</li>
-                                    <li><strong>Week 2-3:</strong> Partnership with 5 local preschools/coaching centers</li>
-                                    <li><strong>Week 3-4:</strong> Community events in 3 nearby localities</li>
-                                    <li><strong>Ongoing:</strong> Daily social media engagement (2-3 posts/day)</li>
-                                </ul>
-                                <p class="text-sm text-yellow-700 mt-2 font-semibold">Expected Impact: 25-35 referral admissions over ${timelineText}</p>
-                            </div>
-
-                            <div class="border-l-4 border-green-500 pl-4 bg-green-50 p-3">
-                                <h3 class="font-semibold text-gray-800 text-lg">💚 PRIORITY 4: COMPETITIVE ADVANTAGE CAMPAIGN</h3>
-                                <ul class="list-disc list-inside text-gray-700 mt-2 ml-4 space-y-1">
-                                    <li><strong>Limited time:</strong> Early bird discount (10-15% off first term)</li>
-                                    <li><strong>Bonus:</strong> Free uniform + books for first 50 admissions</li>
-                                    <li><strong>Waive:</strong> Registration fee for applications in first 2 weeks</li>
-                                    <li><strong>Offer:</strong> Sibling discount (20% for 2nd child)</li>
-                                    <li><strong>Guarantee:</strong> "Satisfaction guarantee - transfer fee waived if not satisfied"</li>
-                                </ul>
-                                <p class="text-sm text-green-700 mt-2 font-semibold">Expected Impact: 20-30% boost in conversion rate</p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="bg-white p-6 rounded-lg border border-gray-200">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">4. Marketing Budget Allocation (${timelineText})</h2>
-                        <p class="text-gray-700 mb-4">Total Budget: ₹${(schoolData.marketingBudget * (1 + goalsData.budgetIncrease/100)).toLocaleString()} (${goalsData.budgetIncrease}% increase)</p>
-                        <div class="space-y-2">
-                            <div class="flex justify-between items-center p-3 bg-red-50 rounded border-l-4 border-red-500">
-                                <span class="text-gray-700 font-semibold">Facebook/Instagram Ads (Urgent)</span>
-                                <span class="font-bold text-red-700">40% - ₹${Math.round(schoolData.marketingBudget * 0.4 * (1 + goalsData.budgetIncrease/100)).toLocaleString()}</span>
-                            </div>
-                            <div class="flex justify-between items-center p-3 bg-orange-50 rounded border-l-4 border-orange-500">
-                                <span class="text-gray-700 font-semibold">Google Ads (Local Search)</span>
-                                <span class="font-bold text-orange-700">25% - ₹${Math.round(schoolData.marketingBudget * 0.25 * (1 + goalsData.budgetIncrease/100)).toLocaleString()}</span>
-                            </div>
-                            <div class="flex justify-between items-center p-3 bg-yellow-50 rounded border-l-4 border-yellow-500">
-                                <span class="text-gray-700 font-semibold">Referral Incentives</span>
-                                <span class="font-bold text-yellow-700">15% - ₹${Math.round(schoolData.marketingBudget * 0.15 * (1 + goalsData.budgetIncrease/100)).toLocaleString()}</span>
-                            </div>
-                            <div class="flex justify-between items-center p-3 bg-green-50 rounded border-l-4 border-green-500">
-                                <span class="text-gray-700 font-semibold">Community Events & Promotions</span>
-                                <span class="font-bold text-green-700">15% - ₹${Math.round(schoolData.marketingBudget * 0.15 * (1 + goalsData.budgetIncrease/100)).toLocaleString()}</span>
-                            </div>
-                            <div class="flex justify-between items-center p-3 bg-blue-50 rounded border-l-4 border-blue-500">
-                                <span class="text-gray-700">Discounts & Waivers</span>
-                                <span class="font-bold text-blue-700">5% - ₹${Math.round(schoolData.marketingBudget * 0.05 * (1 + goalsData.budgetIncrease/100)).toLocaleString()}</span>
-                            </div>
-                        </div>
-                    </section>
-
-                    ${isDetailed ? generateWeekByWeekPlan(weeksTotal, admissionsPerWeek, schoolData, goalsData) : generateMonthlyPlan(goalsData.timeline, admissionsPerWeek, schoolData)}
-
-                    <section class="bg-white p-6 rounded-lg border border-gray-200">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">DAILY TEAM ROUTINE & ACCOUNTABILITY</h2>
-                        <div class="space-y-4">
-                            <div class="bg-blue-50 p-4 rounded-lg">
-                                <h3 class="font-semibold text-gray-800 mb-2">📞 Admission Team Daily Tasks:</h3>
-                                <ul class="list-disc list-inside text-gray-700 space-y-1">
-                                    <li><strong>9:00 AM:</strong> Team huddle - review yesterday's conversions, today's targets</li>
-                                    <li><strong>9:30 AM - 12:00 PM:</strong> Outbound calls to warm leads (target: 30 calls/person)</li>
-                                    <li><strong>12:00 PM - 2:00 PM:</strong> Campus tours (2-3 scheduled visits)</li>
-                                    <li><strong>2:00 PM - 5:00 PM:</strong> Follow-ups, applications processing, visit scheduling</li>
-                                    <li><strong>5:00 PM:</strong> Update CRM, prepare tomorrow's call list</li>
-                                    <li><strong>5:30 PM:</strong> End-of-day metrics review with principal</li>
-                                </ul>
-                            </div>
-                            <div class="bg-green-50 p-4 rounded-lg">
-                                <h3 class="font-semibold text-gray-800 mb-2">📊 Daily Tracking Metrics:</h3>
-                                <ul class="list-disc list-inside text-gray-700 space-y-1">
-                                    <li>New inquiries received: Target ${Math.ceil((goalsData.targetAdmissions / (inquiryToAdmission/100)) / weeksTotal / 7)}/day</li>
-                                    <li>Calls made: Target 30/person/day</li>
-                                    <li>Campus visits conducted: Target 3-5/day</li>
-                                    <li>Applications received: Target ${Math.ceil(admissionsPerWeek / 5)}/day</li>
-                                    <li>Admissions closed: Target ${Math.ceil(admissionsPerWeek / 7)}/day</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="bg-white p-6 rounded-lg border border-gray-200">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4">CONTINGENCY PLANS & RED FLAGS</h2>
-                        <div class="space-y-3">
-                            <div class="border-l-4 border-red-500 pl-4 py-2 bg-red-50">
-                                <h4 class="font-semibold text-red-800">🚨 If behind target by Week 4:</h4>
-                                <ul class="text-sm text-gray-700 mt-1 list-disc list-inside ml-2">
-                                    <li>Double digital ad budget immediately</li>
-                                    <li>Increase referral incentive to ₹8,000</li>
-                                    <li>Launch emergency weekend admission camp</li>
-                                    <li>Extend early bird offer by 2 weeks</li>
-                                </ul>
-                            </div>
-                            <div class="border-l-4 border-orange-500 pl-4 py-2 bg-orange-50">
-                                <h4 class="font-semibold text-orange-800">⚠️ If behind target by Week 8:</h4>
-                                <ul class="text-sm text-gray-700 mt-1 list-disc list-inside ml-2">
-                                    <li>Hire 2 additional admission counselors</li>
-                                    <li>Launch aggressive outdoor advertising</li>
-                                    <li>Partner with education consultants</li>
-                                    <li>Consider extending timeline with revised targets</li>
-                                </ul>
-                            </div>
-                            <div class="border-l-4 border-yellow-500 pl-4 py-2 bg-yellow-50">
-                                <h4 class="font-semibold text-yellow-800">📊 Weekly Red Flags to Watch:</h4>
-                                <ul class="text-sm text-gray-700 mt-1 list-disc list-inside ml-2">
-                                    <li>Inquiry volume drops below ${Math.ceil((goalsData.targetAdmissions / (inquiryToAdmission/100)) / weeksTotal)} per week</li>
-                                    <li>Conversion rate falls below ${(inquiryToAdmission * 0.8).toFixed(1)}%</li>
-                                    <li>Campus visit no-show rate exceeds 30%</li>
-                                    <li>Weekly admissions below ${Math.floor(admissionsPerWeek * 0.7)}</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border-2 border-green-300">
-                        <h2 class="text-xl font-bold text-gray-800 mb-3">✅ SUCCESS PROJECTION</h2>
-                        <p class="text-lg text-gray-700 mb-3">With aggressive execution of this ${timelineText} intensive program:</p>
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <p class="text-sm text-gray-600">Expected Enrollment</p>
-                                <p class="text-2xl font-bold text-green-700">${Math.round(goalsData.targetEnrollment * 0.85)}-${goalsData.targetEnrollment}</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <p class="text-sm text-gray-600">New Admissions</p>
-                                <p class="text-2xl font-bold text-blue-700">${Math.round(goalsData.targetAdmissions * 0.8)}-${goalsData.targetAdmissions}</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <p class="text-sm text-gray-600">Total Inquiries</p>
-                                <p class="text-2xl font-bold text-purple-700">${Math.ceil(goalsData.targetAdmissions / (inquiryToAdmission/100))}</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <p class="text-sm text-gray-600">Conversion Rate</p>
-                                <p class="text-2xl font-bold text-orange-700">30-35%</p>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-600 italic">⚠️ Success depends on: Daily execution discipline, team commitment, budget availability, and market responsiveness</p>
-                    </section>
+                <div class="grid grid-cols-4 gap-2 mt-4">
+                    <div class="bg-blue-800 rounded-lg p-3 text-center"><p class="text-blue-300 text-xs">Current</p><p class="text-white font-bold text-xl">${schoolData.currentEnrollment}</p></div>
+                    <div class="bg-blue-800 rounded-lg p-3 text-center"><p class="text-blue-300 text-xs">Target</p><p class="text-yellow-400 font-bold text-xl">${goalsData.targetEnrollment}</p></div>
+                    <div class="bg-blue-800 rounded-lg p-3 text-center"><p class="text-blue-300 text-xs">Gap</p><p class="text-red-300 font-bold text-xl">${gap}</p></div>
+                    <div class="bg-blue-800 rounded-lg p-3 text-center"><p class="text-blue-300 text-xs">Conversion</p><p class="text-green-300 font-bold text-xl">${conv}%</p></div>
                 </div>
-            `;
-        }
+            </div>
+            <div class="prose prose-sm max-w-none bg-white rounded-xl border border-gray-100 p-6">${content}</div>`;
+    }
 
-        function downloadStrategy() {
-            const strategyHTML = document.getElementById('strategyOutput').innerHTML;
-            const fullHTML = `
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Enrollment Growth Strategy - ${schoolData.schoolName}</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; }
-        h2 { color: #1e40af; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; }
-        h3 { color: #374151; }
-        .metric-box { background: #f3f4f6; padding: 15px; margin: 10px 0; border-radius: 8px; }
-        section { margin-bottom: 30px; page-break-inside: avoid; }
-    </style>
-</head>
-<body>
-    <h1>Enrollment Growth Strategy Report</h1>
-    <p><strong>School:</strong> ${schoolData.schoolName} | <strong>Generated:</strong> ${new Date().toLocaleDateString()}</p>
-    ${strategyHTML}
-</body>
-</html>
-            `;
-            
-            const blob = new Blob([fullHTML], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `enrollment-strategy-${schoolData.schoolName.replace(/\s+/g, '-')}.html`;
-            a.click();
-        }
+    function generateFallbackStrategy() {
+        const weeksTotal = goalsData.timeline === '4months' ? 16 : 24;
+        const admPerWeek = Math.ceil(goalsData.targetAdmissions / weeksTotal);
+        const conv = schoolData.inquiries ? ((schoolData.newAdmissions/schoolData.inquiries)*100).toFixed(1) : 20;
+        const gap = goalsData.targetEnrollment - schoolData.currentEnrollment;
+        return `<div class="space-y-4">
+            <div class="bg-red-50 border-l-4 border-red-600 p-4 rounded-r-lg"><h3 class="font-bold text-red-900">⚡ ${goalsData.timeline==='4months'?'4-Month':'6-Month'} Intensive Plan · ${goalsData.targetAdmissions} new admissions needed</h3><p class="text-red-700 mt-1">Rate required: <strong>${admPerWeek} admissions/week</strong></p></div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-blue-50 p-4 rounded-lg"><p class="text-xs text-gray-600">Inquiry→Admission Rate</p><p class="text-2xl font-bold text-blue-900">${conv}%</p><p class="text-xs text-gray-500">Industry benchmark: 28–35%</p></div>
+                <div class="bg-red-50 p-4 rounded-lg"><p class="text-xs text-gray-600">Enrollment Gap</p><p class="text-2xl font-bold text-red-900">${gap}</p><p class="text-xs text-gray-500">students still needed</p></div>
+                <div class="bg-orange-50 p-4 rounded-lg"><p class="text-xs text-gray-600">Attrition Rate</p><p class="text-2xl font-bold text-orange-900">${schoolData.attritionRate}%</p><p class="text-xs text-gray-500">Target: below ${Math.max(3,schoolData.attritionRate-3)}%</p></div>
+                <div class="bg-green-50 p-4 rounded-lg"><p class="text-xs text-gray-600">Marketing Budget</p><p class="text-2xl font-bold text-green-900">₹${(schoolData.marketingBudget/100000).toFixed(1)}L</p><p class="text-xs text-gray-500">per year</p></div>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-lg p-4"><h3 class="font-bold text-gray-800 mb-3">🚀 Top Priority Actions (Start Today)</h3>
+            <div class="space-y-2">
+                ${[['🚨','Launch Facebook/Instagram + Google Ads immediately','Day 1'],['📞','Call all past inquiries from last 12 months','Day 1–3'],['🎪','Schedule Open House Weekend event','Week 2'],['💰','Launch parent referral program (₹5,000 incentive)','Week 1'],['⚡','Implement 30-min inquiry response SLA','Day 1'],['🤝','Partner with nearby preschools/feeder schools','Week 2–4']].map(([ic,txt,t])=>`<div class="flex items-center gap-3 p-2 bg-gray-50 rounded"><span>${ic}</span><p class="text-sm text-gray-700 flex-1">${txt}</p><span class="text-xs text-gray-400 whitespace-nowrap">${t}</span></div>`).join('')}
+            </div></div>
+            <p class="text-xs text-gray-400 text-center">Note: For full AI-powered detailed strategy, please ensure internet connectivity and try again.</p></div>`;
+    }
 
-        function resetSystem() {
-            schoolData = {};
-            goalsData = {};
-            document.getElementById('step1').querySelectorAll('input, select, textarea').forEach(el => el.value = '');
-            document.getElementById('step2').querySelectorAll('input, select, textarea').forEach(el => el.value = '');
-            goToStep1();
-        }
+    function downloadStrategy() {
+        const html = document.getElementById('strategyOutput').innerHTML;
+        const full = `<!DOCTYPE html><html><head><title>RCF Strategy - ${schoolData.schoolName}</title><style>body{font-family:Arial,sans-serif;max-width:950px;margin:0 auto;padding:30px;color:#1f2937}h2{color:#1d4ed8;border-bottom:2px solid #3b82f6;padding-bottom:8px;margin-top:30px}h3{color:#374151}table{width:100%;border-collapse:collapse}td,th{border:1px solid #e5e7eb;padding:8px 12px;font-size:14px}th{background:#f3f4f6;font-weight:600}ul{line-height:1.8}</style></head><body><h1 style="color:#1e3a8a">RCF Admission Diagnostics & Strategy Report</h1><p><strong>School:</strong> ${schoolData.schoolName} | <strong>Location:</strong> ${schoolData.location} | <strong>Date:</strong> ${new Date().toLocaleDateString('en-IN')}</p><p><strong>Generated by:</strong> Rootscare Foundation Admission Diagnostics & Strategy System</p><hr style="margin:20px 0">${html}</body></html>`;
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([full],{type:'text/html'}));
+        a.download = `RCF-Strategy-${schoolData.schoolName.replace(/\s+/g,'-')}-${new Date().toISOString().slice(0,10)}.html`;
+        a.click();
+    }
 
-        function generateWeekByWeekPlan(weeksTotal, admissionsPerWeek, schoolData, goalsData) {
-            const weeksToShow = Math.min(weeksTotal, 16); // Show up to 16 weeks
-            let html = `
-                <section class="bg-white p-6 rounded-lg border border-gray-200">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4">📅 WEEK-BY-WEEK IMPLEMENTATION ROADMAP</h2>
-                    <p class="text-gray-600 mb-4">Detailed weekly action plan for ${weeksToShow} weeks with specific tasks and targets</p>
-                    <div class="space-y-4">
-            `;
-
-            const weeklyTargets = [
-                { inquiries: Math.ceil(admissionsPerWeek * 3.5), visits: Math.ceil(admissionsPerWeek * 2), apps: Math.ceil(admissionsPerWeek * 1.5), admits: admissionsPerWeek },
-            ];
-
-            for (let week = 1; week <= weeksToShow; week++) {
-                const phase = week <= 4 ? 'Launch Phase' : week <= 8 ? 'Acceleration Phase' : week <= 12 ? 'Optimization Phase' : 'Final Push';
-                const color = week <= 4 ? 'red' : week <= 8 ? 'orange' : week <= 12 ? 'yellow' : 'green';
-                
-                html += `
-                    <div class="border-l-4 border-${color}-500 pl-4 bg-${color}-50 p-4 rounded-r-lg">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-bold text-lg text-gray-800">Week ${week}: ${getWeekTitle(week)}</h3>
-                            <span class="text-xs bg-${color}-200 px-2 py-1 rounded">${phase}</span>
-                        </div>
-                        <div class="grid grid-cols-4 gap-2 mb-3 text-xs">
-                            <div class="bg-white p-2 rounded">
-                                <p class="text-gray-600">Inquiries</p>
-                                <p class="font-bold">${Math.ceil(admissionsPerWeek * 3.5)}</p>
-                            </div>
-                            <div class="bg-white p-2 rounded">
-                                <p class="text-gray-600">Visits</p>
-                                <p class="font-bold">${Math.ceil(admissionsPerWeek * 2)}</p>
-                            </div>
-                            <div class="bg-white p-2 rounded">
-                                <p class="text-gray-600">Applications</p>
-                                <p class="font-bold">${Math.ceil(admissionsPerWeek * 1.5)}</p>
-                            </div>
-                            <div class="bg-white p-2 rounded">
-                                <p class="text-gray-600">Admissions</p>
-                                <p class="font-bold text-green-700">${admissionsPerWeek}</p>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <p class="font-semibold text-gray-800">Key Activities:</p>
-                            <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
-                                ${getWeeklyActivities(week).map(activity => `<li>${activity}</li>`).join('')}
-                            </ul>
-                        </div>
-                    </div>
-                `;
-            }
-
-            html += `
-                    </div>
-                </section>
-            `;
-            return html;
-        }
-
-        function generateMonthlyPlan(timeline, admissionsPerWeek, schoolData) {
-            const months = timeline === '4months' ? 4 : timeline === '6months' ? 6 : 12;
-            let html = `
-                <section class="bg-white p-6 rounded-lg border border-gray-200">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4">📅 MONTH-BY-MONTH IMPLEMENTATION ROADMAP</h2>
-                    <div class="space-y-3">
-            `;
-
-            for (let month = 1; month <= months; month++) {
-                const color = month === 1 ? 'red' : month === 2 ? 'orange' : month === 3 ? 'yellow' : 'green';
-                const weeklyTarget = admissionsPerWeek;
-                const monthlyTarget = weeklyTarget * 4;
-
-                html += `
-                    <div class="border-l-4 border-${color}-500 pl-4 py-3 bg-${color}-50 rounded-r-lg">
-                        <h4 class="font-semibold text-lg text-gray-800">Month ${month}: ${getMonthTitle(month)}</h4>
-                        <p class="text-sm text-gray-700 mt-1">Target: ${monthlyTarget} admissions (${weeklyTarget}/week)</p>
-                        <p class="text-sm text-gray-600 mt-2">${getMonthlyDescription(month)}</p>
-                    </div>
-                `;
-            }
-
-            html += `
-                    </div>
-                </section>
-            `;
-            return html;
-        }
-
-        function getWeekTitle(week) {
-            const titles = {
-                1: 'Emergency Launch & Database Activation',
-                2: 'Digital Blitz & Referral Kickoff',
-                3: 'First Open House & Community Events',
-                4: 'Review & Optimize - First Month Check',
-                5: 'Scale What Works',
-                6: 'Partnership Activation',
-                7: 'Mid-Campaign Push',
-                8: 'Second Month Review & Adjust',
-                9: 'Advanced Targeting',
-                10: 'Retention Focus Begins',
-                11: 'Competitive Advantage Push',
-                12: 'Third Month Review',
-                13: 'Final Push Begins',
-                14: 'All Channels Maximized',
-                15: 'Last Call Campaigns',
-                16: 'Final Week - Close Strong'
-            };
-            return titles[week] || `Week ${week} Activities`;
-        }
-
-        function getWeeklyActivities(week) {
-            const activities = {
-                1: [
-                    'Launch Facebook/Instagram ads (₹40K budget)',
-                    'Start Google Ads for local searches',
-                    'Call all leads from past 12 months',
-                    'Send SMS to entire inquiry database',
-                    'Set up WhatsApp chatbot',
-                    'Train team on 30-min response protocol'
-                ],
-                2: [
-                    'Launch referral program with ₹5K incentive',
-                    'First parent email campaign',
-                    'Schedule 15+ campus visits',
-                    'Optimize ad targeting based on Week 1 data',
-                    'Create parent testimonial video',
-                    'Post 3x daily on social media'
-                ],
-                3: [
-                    'Host major Open House Weekend event',
-                    'Launch community event series',
-                    'Partner outreach to 5 preschools',
-                    'Alumni network activation email',
-                    'Introduce early bird discount (10% off)',
-                    'Process and close Week 1-2 warm leads'
-                ],
-                4: [
-                    'Review Month 1 results vs targets',
-                    'Adjust budget allocation based on ROI',
-                    'Identify and fix conversion bottlenecks',
-                    'Scale best-performing ad campaigns',
-                    'Plan Month 2 calendar',
-                    'Team performance review and coaching'
-                ],
-                5: [
-                    'Double down on highest-ROI channels',
-                    'Launch retargeting campaigns',
-                    'Second Open House',
-                    'Introduce sibling discount',
-                    'Start alumni referral outreach',
-                    'Expand Google Ads to nearby areas'
-                ],
-                6: [
-                    'Activate preschool partnerships',
-                    'Launch coaching center collaborations',
-                    'Community event #2',
-                    'Parent webinar series begins',
-                    'Expand social media to YouTube shorts',
-                    'Local newspaper feature article'
-                ],
-                7: [
-                    'Mid-campaign aggressive push',
-                    'Waive registration fees promo',
-                    'Third Open House',
-                    'Re-engage all unconverted leads',
-                    'Launch student ambassador program',
-                    'Google My Business optimization'
-                ],
-                8: [
-                    'Month 2 comprehensive review',
-                    'Course-correct if behind target',
-                    'Celebrate successes with team',
-                    'Refine targeting personas',
-                    'Prepare Month 3 strategy',
-                    'Financial aid consultations offered'
-                ],
-                9: [
-                    'Advanced audience segmentation',
-                    'Personalized video messages to hot leads',
-                    'Fourth Open House',
-                    'Community event #3',
-                    'Launch LinkedIn parent targeting',
-                    'Introduce payment plan options'
-                ],
-                10: [
-                    'Focus on student retention programs',
-                    'Parent satisfaction surveys',
-                    'Enhanced student support initiatives',
-                    'Teacher engagement activities',
-                    'Continue aggressive new admissions',
-                    'Optimize application process speed'
-                ],
-                11: [
-                    'Competitive comparison campaigns',
-                    'Limited time bonuses (free uniform)',
-                    'Fifth Open House',
-                    'Referral campaign boost',
-                    'Testimonial showcase week',
-                    'Direct mail to target neighborhoods'
-                ],
-                12: [
-                    'Month 3 review and analysis',
-                    'Final month strategy finalization',
-                    'Team motivation and incentives',
-                    'Backup plan activation if needed',
-                    'VIP parent events',
-                    'Scholarship announcements'
-                ],
-                13: [
-                    'Final push begins - all channels active',
-                    'Create urgency messaging',
-                    'Sixth Open House',
-                    'Re-contact all past inquiries',
-                    'Flash sale on registration',
-                    'Daily social media contests'
-                ],
-                14: [
-                    'Maximize every channel simultaneously',
-                    'Personal calls to all fence-sitters',
-                    'Seventh Open House',
-                    'Emergency weekend admission camp',
-                    'Extend deadlines strategically',
-                    'Increase referral bonus to ₹8K'
-                ],
-                15: [
-                    'Last call campaigns across all channels',
-                    '"Final spots available" messaging',
-                    'One-on-one parent meetings',
-                    'Special weekend consultations',
-                    'Close all warm and lukewarm leads',
-                    'Prepare final admissions paperwork'
-                ],
-                16: [
-                    'Final week intensive closings',
-                    'Process all pending applications',
-                    'Conduct exit interviews on losses',
-                    'Celebrate achievement with team',
-                    'Plan retention strategy for new admits',
-                    'Document lessons learned for next cycle'
-                ]
-            };
-            return activities[week] || ['Continue systematic execution', 'Monitor metrics daily', 'Adjust tactics as needed'];
-        }
-
-        function getMonthTitle(month) {
-            const titles = {
-                1: 'Launch & Foundation',
-                2: 'Acceleration & Scale',
-                3: 'Optimization & Partnerships',
-                4: 'Final Push & Close'
-            };
-            return titles[month] || `Month ${month}`;
-        }
-
-        function getMonthlyDescription(month) {
-            const descriptions = {
-                1: 'Emergency launch of all channels, database reactivation, digital ads, referral program, first open houses. Goal: Build momentum fast.',
-                2: 'Scale successful tactics, activate partnerships, expand reach, optimize conversion process. Goal: Hit stride with consistent weekly results.',
-                3: 'Refine targeting, introduce competitive advantages, expand community presence, focus on quality. Goal: Maintain pace with higher conversions.',
-                4: 'Final aggressive push, maximize all channels, create urgency, close all leads. Goal: Hit or exceed targets with strong finish.'
-            };
-            return descriptions[month] || 'Continue execution and optimization';
-        }
-    </script>
+    function resetSystem() {
+        schoolData={}; goalsData={};
+        document.querySelectorAll('input,select,textarea').forEach(el=>el.value='');
+        document.getElementById('budgetIncrease').value='0';
+        document.getElementById('timeline').value='4months';
+        document.getElementById('planDetail').value='standard';
+        document.querySelectorAll('.step-container').forEach(el=>el.classList.remove('active'));
+        document.getElementById('step1').classList.add('active');
+        updateProgress(1);
+        goToSection(1);
+    }
+</script>
 </body>
 </html>
